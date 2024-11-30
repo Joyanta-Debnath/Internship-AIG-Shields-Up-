@@ -1,0 +1,36 @@
+Forage AIG Cybersecurity Program
+Bruteforce starter template
+'''
+
+from zipfile import ZipFile
+import sys
+
+def attempt_extract(zf_handle, password):
+    """
+    Attempt to extract the zip file using the provided password.
+    """
+    try:
+        zf_handle.extractall(pwd=password.strip())
+        print(f"[+] Password found: {password.decode().strip()}")
+        return True
+    except Exception:
+        return False
+
+def main():
+    print("[+] Beginning bruteforce...")
+    try:
+        with ZipFile('enc.zip') as zf:
+            with open('rockyou.txt', 'rb') as f:
+                for line in f:
+                    password = line.strip()  # Read password from file
+                    if attempt_extract(zf, password):
+                        print("[+] Extraction successful.")
+                        return  # Stop once the correct password is found
+        print("[!] Password not found in the list.")
+    except FileNotFoundError as e:
+        print(f"[!] File not found: {e}")
+    except Exception as e:
+        print(f"[!] An error occurred: {e}")
+
+if __name__ == "__main__":
+    main()
